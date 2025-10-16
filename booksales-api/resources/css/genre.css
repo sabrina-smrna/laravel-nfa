@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f0f4f8, #d9e4ec);
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background-color: #2b6777;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+main {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+
+main:hover {
+    transform: translateY(-3px);
+}
+
+h1 {
+    text-align: center;
+    color: #2b6777;
+    margin-bottom: 25px;
+}
+
+.genre-card {
+    background: #f9fafb;
+    margin: 15px 0;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 6px solid #52ab98;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.genre-card:hover {
+    background: #e6f3f1;
+    transform: translateX(6px);
+}
+
+.genre-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #1b3a4b;
+}
+
+.genre-desc {
+    color: #555;
+    margin-top: 6px;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 10px;
+    color: #777;
+    font-size: 0.9rem;
+}
