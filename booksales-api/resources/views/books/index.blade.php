@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Books Collection</title>
@@ -56,4 +56,4 @@
     </div>
 
 </body>
-</html>
+</html> -->
