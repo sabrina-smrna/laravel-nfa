@@ -5,14 +5,18 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\GenreController;
 
-//  route crud authors
-Route::get('/authors', [AuthorController::class, 'index']);
-Route::post('/authors', [AuthorController::class, 'store']);
+Route::apiResource('authors', AuthorController::class);
+Route::apiResource('genres', GenreController::class);
 
-//  rote crud books
-Route::get('/books', [BookController::class, 'index']);
 
-// route crud genres
+// //  route crud authors
+// Route::get('/authors', [AuthorController::class, 'index']);
+// Route::post('/authors', [AuthorController::class, 'store']);
 
-Route::get('/genres', [GenreController::class, 'index']);
-Route::post('/genres', [GenreController::class, 'store']);
+// //  rote crud books
+// Route::get('/books', [BookController::class, 'index']);
+
+// // route crud genres
+
+// Route::get('/genres', [GenreController::class, 'index']);
+// Route::post('/genres', [GenreController::class, 'store']);

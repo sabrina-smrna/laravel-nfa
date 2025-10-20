@@ -10,7 +10,7 @@ class AuthorController extends Controller
     // GET /api/authors
     public function index()
     {
-        $authors = Author::with('books')->get();
+        $authors = Author::all();
 
         return response()->json([
             'status' => 'success',
@@ -18,27 +18,12 @@ class AuthorController extends Controller
         ], 200);
     }
 
-    // GET /api/authors/{id}
-    public function show($id)
-    {
-        $author = Author::with('books')->find($id);
-
-        if (!$author) {
-            return response()->json(['message' => 'Author not found'], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $author
-        ], 200);
-    }
-
     // POST /api/authors
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string',
-            'country' => 'nullable|string',
+            'name' => 'required|string|max:100',
+            'country' => 'nullable|string|max:100',
             'biography' => 'nullable|string'
         ]);
 
@@ -50,19 +35,47 @@ class AuthorController extends Controller
         ], 201);
     }
 
+    // GET /api/authors/{id}
+    public function show($id)
+    {
+        $author = Author::find($id);
+
+        if (!$author) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Author yang kamu cari belum terdaftar nih'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $author
+        ], 200);
+    }
+
     // PUT /api/authors/{id}
     public function update(Request $request, $id)
     {
         $author = Author::find($id);
 
         if (!$author) {
-            return response()->json(['message' => 'Author not found'], 404);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Author not found'
+            ], 404);
         }
 
-        $author->update($request->all());
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'country' => 'nullable|string|max:100',
+            'biography' => 'nullable|string'
+        ]);
+
+        $author->update($validated);
 
         return response()->json([
             'status' => 'success',
+            'message' => 'Author updated successfully',
             'data' => $author
         ], 200);
     }
@@ -73,11 +86,17 @@ class AuthorController extends Controller
         $author = Author::find($id);
 
         if (!$author) {
-            return response()->json(['message' => 'Author not found'], 404);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Author not found'
+            ], 404);
         }
 
         $author->delete();
 
-        return response()->json(['message' => 'Author deleted successfully'], 200);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Author deleted successfully'
+        ], 200);
     }
 }
