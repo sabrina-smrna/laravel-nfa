@@ -7,96 +7,69 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    // GET /api/authors
+    // ✅ READ ALL (Public)
     public function index()
     {
         $authors = Author::all();
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $authors
-        ], 200);
+        return response()->json($authors);
     }
 
-    // POST /api/authors
+    // ✅ SHOW (Public)
+    public function show($id)
+    {
+        $author = Author::find($id);
+        if (!$author) {
+            return response()->json(['error' => 'Author not found'], 404);
+        }
+        return response()->json($author);
+    }
+
+    // 🔒 CREATE (Admin Only)
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'country' => 'nullable|string|max:100',
-            'biography' => 'nullable|string'
+            'name' => 'required|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'biography' => 'nullable|string',
         ]);
 
         $author = Author::create($validated);
-
         return response()->json([
-            'status' => 'success',
+            'message' => 'Author created successfully',
             'data' => $author
         ], 201);
     }
 
-    // GET /api/authors/{id}
-    public function show($id)
-    {
-        $author = Author::find($id);
-
-        if (!$author) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Author yang kamu cari belum terdaftar nih'
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $author
-        ], 200);
-    }
-
-    // PUT /api/authors/{id}
+    // 🔒 UPDATE (Admin Only)
     public function update(Request $request, $id)
     {
         $author = Author::find($id);
-
         if (!$author) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Author not found'
-            ], 404);
+            return response()->json(['error' => 'Author not found'], 404);
         }
 
         $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'country' => 'nullable|string|max:100',
-            'biography' => 'nullable|string'
+            'name' => 'sometimes|required|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'biography' => 'nullable|string',
         ]);
 
         $author->update($validated);
-
         return response()->json([
-            'status' => 'success',
             'message' => 'Author updated successfully',
             'data' => $author
-        ], 200);
+        ]);
     }
 
-    // DELETE /api/authors/{id}
+    // 🔒 DESTROY (Admin Only)
     public function destroy($id)
     {
         $author = Author::find($id);
-
         if (!$author) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Author not found'
-            ], 404);
+            return response()->json(['error' => 'Author not found'], 404);
         }
 
         $author->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Author deleted successfully'
-        ], 200);
+        return response()->json(['message' => 'Author deleted successfully']);
     }
 }
