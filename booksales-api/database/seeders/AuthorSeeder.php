@@ -1,20 +1,16 @@
 <?php
-
 namespace Database\Seeders;
-
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Author;
 
-class AuthorSeeder extends Seeder
-{
-    public function run(): void
-    {
-        DB::table('authors')->insert([
-            ['name' => 'J.K. Rowling', 'country' => 'United Kingdom'],
-            ['name' => 'George R.R. Martin', 'country' => 'United States'],
-            ['name' => 'Haruki Murakami', 'country' => 'Japan'],
-            ['name' => 'Jane Austen', 'country' => 'United Kingdom'],
-            ['name' => 'Paulo Coelho', 'country' => 'Brazil'],
+class AuthorSeeder extends Seeder {
+    public function run(): void {
+        Author::insert([
+            ['name'=>'J.K. Rowling','photo'=>null,'bio'=>'Penulis Harry Potter','created_at'=>now(),'updated_at'=>now()],
+            ['name'=>'George R.R. Martin','photo'=>null,'bio'=>'Penulis Game of Thrones','created_at'=>now(),'updated_at'=>now()],
+            ['name'=>'Haruki Murakami','photo'=>null,'bio'=>'Penulis Jepang terkenal','created_at'=>now(),'updated_at'=>now()],
+            ['name'=>'Jane Austen','photo'=>null,'bio'=>'Penulis klasik Inggris','created_at'=>now(),'updated_at'=>now()],
+            ['name'=>'Paulo Coelho','photo'=>null,'bio'=>'Penulis Brasil','created_at'=>now(),'updated_at'=>now()],
         ]);
     }
 }

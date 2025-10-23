@@ -1,18 +1,13 @@
 <?php
-
 namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Book extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['title', 'genre', 'published_year', 'author_id'];
-
-    public function author()
-    {
-        return $this->belongsTo(Author::class);
-    }
+    protected $fillable = ['title','description','price','stock','cover_photo','genre_id','author_id'];
+    public function genre() { return $this->belongsTo(Genre::class); }
+    public function author() { return $this->belongsTo(Author::class); }
+    public function transactions() { return $this->hasMany(Transaction::class); }
 }

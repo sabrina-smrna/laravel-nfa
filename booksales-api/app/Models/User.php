@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -23,4 +24,21 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean',
+    ];
+
+    // Tambahkan ini
+    protected $appends = ['role'];
+
+    public function getRoleAttribute()
+    {
+        return $this->is_admin ? 'admin' : 'user';
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'customer_id');
+    }
 }
