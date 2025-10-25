@@ -1,72 +1,76 @@
 import { useState } from "react";
-import { createAuthor } from "../../../_services/authors";
 import { useNavigate } from "react-router-dom";
+import { createAuthor } from "../../../_services/authors";
 
 export default function AuthorCreate() {
-  const [name, setName] = useState("");
-  const [bio, setBio] = useState("");
-  const [photo, setPhoto] = useState("");
+  const [form, setForm] = useState({ name: "", bio: "", photo: "" });
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createAuthor({ name, bio, photo });
+      await createAuthor(form);
+      alert("Author berhasil ditambahkan!");
       navigate("/admin/authors");
     } catch (error) {
-      console.error("Gagal menambahkan author:", error);
+      console.error("Gagal menambah author:", error);
+      alert("Terjadi kesalahan saat menambah data.");
     }
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 p-5">
-      <div className="max-w-md mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+    <section className="bg-white dark:bg-gray-900">
+      <div className="max-w-2xl px-4 py-8 mx-auto">
+        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           Tambah Author
         </h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 dark:text-gray-300 mb-2">
-              Nama Author
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Masukkan nama author"
-              required
-            />
-          </div>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Nama</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                className="border rounded-lg p-2.5 w-full"
+                placeholder="Masukkan nama author"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 dark:text-gray-300 mb-2">
-              Bio
-            </label>
-            <textarea
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Masukkan bio singkat"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Bio</label>
+              <textarea
+                name="bio"
+                value={form.bio}
+                onChange={handleChange}
+                rows="3"
+                className="border rounded-lg p-2.5 w-full"
+                placeholder="Masukkan deskripsi singkat"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 dark:text-gray-300 mb-2">
-              URL Foto
-            </label>
-            <input
-              type="text"
-              value={photo}
-              onChange={(e) => setPhoto(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Masukkan URL foto (opsional)"
-            />
+            <div>
+              <label className="block text-sm font-medium mb-1">Photo URL</label>
+              <input
+                type="text"
+                name="photo"
+                value={form.photo}
+                onChange={handleChange}
+                className="border rounded-lg p-2.5 w-full"
+                placeholder="Masukkan URL foto"
+              />
+            </div>
           </div>
 
           <button
             type="submit"
-            className="w-full text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="mt-5 text-white bg-indigo-700 hover:bg-indigo-800 px-5 py-2.5 rounded-lg"
           >
             Simpan
           </button>

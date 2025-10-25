@@ -1,51 +1,92 @@
 import { useEffect, useState } from "react";
+import { getGenres, deleteGenre } from "../../../_services/genres";
 import { Link } from "react-router-dom";
-import { getGenres } from "../../../_services/genres";
 
 export default function AdminGenres() {
   const [genres, setGenres] = useState([]);
 
   useEffect(() => {
-    const fetchGenres = async () => {
-      const data = await getGenres();
-      setGenres(data);
-    };
-    fetchGenres();
+    fetchData();
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const genresData = await getGenres();
+      setGenres(Array.isArray(genresData) ? genresData : genresData.data);
+    } catch (error) {
+      console.error("Gagal mengambil data genre:", error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (confirm("Yakin mau hapus genre ini?")) {
+      await deleteGenre(id);
+      fetchData();
+    }
+  };
+
   return (
-    <section className="bg-gray-50 py-8 dark:bg-gray-900 md:py-12">
-      <div className="mx-auto max-w-screen-xl px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-950 p-8 text-white">
+      <div className="max-w-6xl mx-auto bg-gray-900/80 p-8 rounded-3xl shadow-2xl border border-gray-800">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Genres
-          </h2>
+          <h1 className="text-3xl font-bold tracking-wide">🎵 Genre List</h1>
           <Link
-            to="/admin/genres/create"
-            className="rounded-lg bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-700"
+            to="create"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-semibold shadow-md transition"
           >
             + Add Genre
           </Link>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {genres.map((genre) => (
-            <div
-              key={genre.id}
-              className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
-            >
-              <div className="h-24 flex items-center justify-center bg-indigo-50 dark:bg-indigo-900 rounded-md">
-                <span className="text-indigo-700 dark:text-indigo-300 text-xl font-semibold">
-                  {genre.name}
-                </span>
-              </div>
-              <p className="mt-4 text-gray-600 dark:text-gray-400 text-sm">
-                {genre.description || "No description available."}
-              </p>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-gray-300">
+            <thead className="bg-gray-800 text-gray-100 uppercase text-sm">
+              <tr>
+                <th className="py-3 px-4">#</th>
+                <th className="py-3 px-4">Name</th>
+                <th className="py-3 px-4">Description</th>
+                <th className="py-3 px-4 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {genres.length > 0 ? (
+                genres.map((genre, index) => (
+                  <tr
+                    key={genre.id}
+                    className="border-b border-gray-700 hover:bg-gray-800/60 transition"
+                  >
+                    <td className="py-3 px-4">{index + 1}</td>
+                    <td className="py-3 px-4 font-semibold text-white">
+                      {genre.name}
+                    </td>
+                    <td className="py-3 px-4">{genre.description || "-"}</td>
+                    <td className="py-3 px-4 text-center space-x-2">
+                      <Link
+                        to={`edit/${genre.id}`}
+                        className="bg-yellow-500 hover:bg-yellow-600 px-3 py-1 rounded-md font-medium text-sm"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(genre.id)}
+                        className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md font-medium text-sm"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center py-5 text-gray-400">
+                    No genres found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
