@@ -1,8 +1,15 @@
 import axios from "axios";
 
 const API = axios.create({
-  // baseURL: "https://akmal-bc.karyakreasi.id/api"
-  baseURL: "http://127.0.0.1:8000/api", //pakai local karena pakai yang atas tidak bisa
-})
+  baseURL: "http://127.0.0.1:8000/api",
+});
+
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export default API;
