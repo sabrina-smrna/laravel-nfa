@@ -21,9 +21,14 @@ return Application::configure(basePath: dirname(__DIR__))
         // Alias middleware kustom
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'customer' => \App\Http\Middleware\CustomerMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (Throwable $e, $request) {
+            if ($e instanceof \Illuminate\Auth\AuthenticationException) {
+                return redirect('/login');
+            }
+        });
     })
     ->create();

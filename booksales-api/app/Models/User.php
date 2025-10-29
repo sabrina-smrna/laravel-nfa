@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notifiable; // 🧩 ini penting!
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -16,7 +16,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin',
+        'role',
     ];
 
     protected $hidden = [
@@ -26,19 +26,5 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'is_admin' => 'boolean',
     ];
-
-    // Tambahkan ini
-    protected $appends = ['role'];
-
-    public function getRoleAttribute()
-    {
-        return $this->is_admin ? 'admin' : 'user';
-    }
-
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class, 'customer_id');
-    }
 }

@@ -28,9 +28,9 @@ class AuthorController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'country' => 'nullable|string|max:255',
-            'biography' => 'nullable|string',
+            'name'  => 'required|string|max:255',
+            'bio'   => 'nullable|string',
+            'photo' => 'nullable|string',
         ]);
 
         $author = Author::create($validated);
@@ -49,9 +49,9 @@ class AuthorController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'country' => 'nullable|string|max:255',
-            'biography' => 'nullable|string',
+            'name'  => 'required|string|max:255',
+            'bio'   => 'nullable|string',
+            'photo' => 'nullable|string', 
         ]);
 
         $author->update($validated);

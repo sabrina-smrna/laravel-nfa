@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Author extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','photo','bio'];
+    protected $fillable = ['name', 'bio', 'photo'];
     public function books() { return $this->hasMany(Book::class); }
 }
